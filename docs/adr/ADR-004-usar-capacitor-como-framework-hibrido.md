@@ -7,7 +7,7 @@
 
 ## Contexto y problema
 
-El entregable 7 (semana 11) exige construir un prototipo de aplicacion web utilizando un framework de desarrollo hibrido IOS/Android y desplegar el aplicativo web/mobile. La aplicacion existente (foodplease-app) es un backend Flask con plantillas Jinja2 y una API REST, y previamente se planteo una capa hibrida ligera basada en PWA (manifest + service worker). Sin embargo, una PWA no es estrictamente un framework de desarrollo hibrido: es una capacidad de las aplicaciones web. Para cumplir literalmente con el criterio del 25% de la rubrica y poder generar artefactos nativos (APK, IPA), se requiere un framework que empaquete el bundle web en proyectos nativos compilables.
+El entregable 7 (semana 11) exige construir un prototipo de aplicacion web utilizando un framework de desarrollo hibrido IOS/Android y desplegar el aplicativo web/mobile. La aplicacion existente (carpeta `backend/`) es un backend Flask con plantillas Jinja2 y una API REST, y previamente se planteo una capa hibrida ligera basada en PWA (manifest + service worker). Sin embargo, una PWA no es estrictamente un framework de desarrollo hibrido: es una capacidad de las aplicaciones web. Para cumplir literalmente con el criterio del 25% de la rubrica y poder generar artefactos nativos (APK, IPA), se requiere un framework que empaquete el bundle web en proyectos nativos compilables.
 
 Adicionalmente, el equipo ya domina HTML, CSS y JavaScript, y los mockups documentados en la Fase 3 (semana 6) estan disenados para una experiencia movil que consume la API REST del backend. Adoptar un framework que obligue a reescribir la presentacion en otro stack (Angular, React, Dart) implicaria un costo desproporcionado para el alcance academico.
 
@@ -30,11 +30,11 @@ Adicionalmente, el equipo ya domina HTML, CSS y JavaScript, y los mockups docume
 
 ## Decision
 
-Se decide utilizar **Capacitor 6** como framework de desarrollo hibrido iOS/Android para el cliente movil de FoodPlease. El proyecto movil vive en una carpeta independiente (foodplease-mobile) con appId cl.unab.foodplease, y consume la API REST de foodplease-app via fetch.
+Se decide utilizar **Capacitor 6** como framework de desarrollo hibrido iOS/Android para el cliente movil de FoodPlease. El proyecto movil vive en la carpeta `mobile/` del monorepo con appId cl.unab.foodplease, y consume la API REST del backend Flask (carpeta `backend/`) via fetch.
 
 ## Rationale
 
-Capacitor toma el bundle web existente (HTML/CSS/JS en foodplease-mobile/www/) y lo empaqueta en proyectos nativos Android (Java + Gradle) e iOS (Swift + Xcode) mediante los comandos `npx cap add android` y `npx cap add ios`. El resultado es un proyecto Android Studio y un proyecto Xcode compilables a APK e IPA, lo que satisface literalmente el requisito de la rubrica.
+Capacitor toma el bundle web existente (HTML/CSS/JS en mobile/www/) y lo empaqueta en proyectos nativos Android (Java + Gradle) e iOS (Swift + Xcode) mediante los comandos `npx cap add android` y `npx cap add ios`. El resultado es un proyecto Android Studio y un proyecto Xcode compilables a APK e IPA, lo que satisface literalmente el requisito de la rubrica.
 
 Ionic sobre Angular fue descartado como alternativa principal porque introduce un toolchain Angular adicional cuando el equipo ya trabaja con HTML/JS planos, y porque el ahorro principal de Ionic (su libreria de componentes UI) no compensa la curva en un MVP de pocas pantallas. React Native y Flutter fueron descartados por requerir reescribir la presentacion en JSX o Dart, fragmentando la base de codigo respecto de la PWA web. Mantener solo PWA fue descartado porque, aunque la PWA cubre el espiritu del requisito (instalable en iOS/Android), no es un framework de desarrollo hibrido y un evaluador estricto podria descontar puntos en el criterio del 25%.
 
@@ -54,14 +54,14 @@ Capacitor coexiste sin friccion con la PWA: el mismo bundle web puede instalarse
 
 - Introduce una dependencia Node.js (npm) en el proceso de build, ausente en el backend Flask.
 - Para compilar iOS se requiere macOS con Xcode, lo que limita la firma desde Windows o Linux.
-- El equipo debe mantener dos repositorios o carpetas: foodplease-app (backend) y foodplease-mobile (cliente hibrido).
+- El equipo debe mantener dos carpetas del monorepo: `backend/` (Flask) y `mobile/` (Capacitor), sincronizadas mediante la API REST.
 - Las actualizaciones de la UI movil requieren `npx cap sync` para reflejarse en los proyectos nativos.
 
 ## Implicancias de implementacion
 
-- Crear la carpeta foodplease-mobile/ con package.json (deps: @capacitor/core, @capacitor/cli, @capacitor/android, @capacitor/ios, plugins SplashScreen y StatusBar).
+- Crear la carpeta mobile/ con package.json (deps: @capacitor/core, @capacitor/cli, @capacitor/android, @capacitor/ios, plugins SplashScreen y StatusBar).
 - Definir capacitor.config.json con appId cl.unab.foodplease, appName FoodPlease, webDir www y configuracion de plugins.
-- Colocar el bundle web en foodplease-mobile/www/ (index.html, styles.css, app.js).
+- Colocar el bundle web en mobile/www/ (index.html, styles.css, app.js).
 - Configurar el cliente para consumir la API REST de Flask con URL parametrizable (por defecto http://10.0.2.2:5000 para emulador Android; en produccion la URL Heroku/Render).
 - Habilitar CORS en el backend Flask (`Flask-Cors`) para que la app pueda consumir /api/* desde un origen distinto.
 - Comandos de trabajo: `npm install`, `npx cap add android`, `npx cap add ios`, `npx cap sync`, `npx cap open android` y `npx cap open ios`.

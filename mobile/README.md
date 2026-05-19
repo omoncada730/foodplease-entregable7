@@ -22,7 +22,7 @@ foodplease-mobile/
 - Node.js 18+
 - Para Android: Android Studio + JDK 17
 - Para iOS: macOS con Xcode 15+
-- Backend Flask (foodplease-app) corriendo local o desplegado
+- Backend Flask (carpeta `backend/` del monorepo) corriendo local o desplegado
 
 ## Comandos
 

@@ -1,8 +1,12 @@
 # FoodPlease - APTC106 Semana 11 (Entregable 7)
 
+[![Repo](https://img.shields.io/badge/repo-omoncada730%2Ffoodplease--entregable7-blue)](https://github.com/omoncada730/foodplease-entregable7)
+
 Sistema de delivery de alimentos con backend web Flask, capa PWA instalable y
 app movil hibrida iOS/Android construida con Capacitor. Universidad Andres
 Bello, Taller de Desarrollo Web y Movil.
+
+Repositorio: https://github.com/omoncada730/foodplease-entregable7
 
 ## Equipo
 

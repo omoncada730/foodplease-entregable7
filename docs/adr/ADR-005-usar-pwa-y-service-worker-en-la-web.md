@@ -7,7 +7,7 @@
 
 ## Contexto y problema
 
-El frontend web de foodplease-app esta construido con plantillas Jinja2 mobile-first servidas por Flask. La rubrica del entregable 7 exige que el prototipo tenga caracteristicas de aplicacion movil y los mockups de la Fase 3 (semana 6) muestran una experiencia tipo app (navegacion inferior, listados verticales, tarjetas). Adicionalmente, el equipo ya decidio usar Capacitor (ADR-004) como framework hibrido principal para generar artefactos APK e IPA.
+El frontend web del backend (carpeta `backend/`) esta construido con plantillas Jinja2 mobile-first servidas por Flask. La rubrica del entregable 7 exige que el prototipo tenga caracteristicas de aplicacion movil y los mockups de la Fase 3 (semana 6) muestran una experiencia tipo app (navegacion inferior, listados verticales, tarjetas). Adicionalmente, el equipo ya decidio usar Capacitor (ADR-004) como framework hibrido principal para generar artefactos APK e IPA.
 
 Queda pendiente decidir si el frontend web, ademas de servir como base del bundle Capacitor, debe ofrecer una experiencia instalable directamente desde el navegador (sin pasar por una tienda de aplicaciones) y un comportamiento resiliente ante perdida temporal de conectividad. Una PWA aporta exactamente esas dos capacidades mediante un Web App Manifest y un Service Worker, sin reescribir el frontend.
 

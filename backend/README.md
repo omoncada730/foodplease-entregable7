@@ -51,8 +51,8 @@ Interfaz responsive optimizada para dispositivos móviles.
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/Priscila446/foodplease-app.git
-cd foodplease-app
+git clone https://github.com/omoncada730/foodplease-entregable7.git
+cd foodplease-entregable7/backend
 ```
 
 ### 2. Crear entorno virtual (recomendado)
@@ -92,7 +92,7 @@ La base de datos se crea automáticamente con datos de ejemplo al ejecutar por p
 ## 📁 Estructura del Proyecto (MVC)
 
 ```
-foodplease-app/
+backend/
 ├── app.py                    # Controlador principal (rutas Flask)
 ├── models/
 │   ├── __init__.py
