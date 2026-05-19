@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#FF6B35">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="FoodPlease">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>FoodPlease - {% block title %}Inicio{% endblock %}</title>
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍔</text></svg>">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192.png') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="{{ url_for('index') }}" class="navbar-brand">Food<span>Please</span> 🍔</a>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="container" style="padding-bottom:0;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" onclick="this.remove()">
+            {% if category == 'success' %}✅{% else %}⚠️{% endif %}
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="{{ url_for('index') }}" class="nav-item {% if request.endpoint == 'index' %}active{% endif %}">
+            <span class="nav-icon">🏠</span>Inicio
+        </a>
+        <a href="{{ url_for('listar_pedidos') }}" class="nav-item {% if 'pedido' in request.endpoint|default('') %}active{% endif %}">
+            <span class="nav-icon">📋</span>Pedidos
+        </a>
+        <a href="{{ url_for('listar_productos') }}" class="nav-item {% if 'producto' in request.endpoint|default('') %}active{% endif %}">
+            <span class="nav-icon">🍔</span>Menú
+        </a>
+        <a href="{{ url_for('listar_clientes') }}" class="nav-item {% if 'cliente' in request.endpoint|default('') %}active{% endif %}">
+            <span class="nav-icon">👥</span>Clientes
+        </a>
+        <a href="{{ url_for('listar_repartidores') }}" class="nav-item {% if 'repartidor' in request.endpoint|default('') %}active{% endif %}">
+            <span class="nav-icon">🛵</span>Delivery
+        </a>
+    </nav>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js').catch(function (err) {
+                    console.warn('SW register failed:', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

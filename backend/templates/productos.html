@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Productos{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Menu</h1>
+            <p class="page-subtitle">{{ productos|length }} productos</p>
+        </div>
+    </div>
+
+    {% if productos %}
+    {% for p in productos %}
+    <div class="card">
+        <div class="card-body">
+            <div class="card-row">
+                <div>
+                    <div class="card-title">{{ p.nombre }}</div>
+                    <div class="card-subtitle">{{ p.descripcion or 'Sin descripcion' }}</div>
+                </div>
+                <div class="price">${{ '{:,.0f}'.format(p.precio) }}</div>
+            </div>
+            <div class="card-meta">
+                <span class="badge badge-primary">{{ p.categoria }}</span>
+                {% if p.disponible %}
+                <span class="badge badge-success">✅ Disponible</span>
+                {% else %}
+                <span class="badge badge-danger">❌ No disponible</span>
+                {% endif %}
+            </div>
+            <div class="card-actions">
+                <a href="{{ url_for('editar_producto', id=p.id) }}" class="btn btn-outline btn-sm">✏️ Editar</a>
+                <a href="{{ url_for('eliminar_producto', id=p.id) }}" class="btn btn-outline btn-sm" onclick="return confirm('¿Eliminar este producto?')">🗑️ Eliminar</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">🍔</div>
+        <p>No hay productos registrados</p>
+    </div>
+    {% endif %}
+
+    <a href="{{ url_for('crear_producto') }}" class="btn btn-primary btn-fab">+</a>
+</div>
+{% endblock %}

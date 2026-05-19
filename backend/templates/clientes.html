@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Clientes{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Clientes</h1>
+            <p class="page-subtitle">{{ clientes|length }} registrados</p>
+        </div>
+    </div>
+
+    {% if clientes %}
+    {% for c in clientes %}
+    <div class="card">
+        <div class="card-body">
+            <div class="card-row">
+                <div>
+                    <div class="card-title">👤 {{ c.nombre }}</div>
+                    <div class="card-subtitle">{{ c.email }}</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                {% if c.telefono %}<span class="badge badge-info">📞 {{ c.telefono }}</span>{% endif %}
+                {% if c.direccion %}<span class="badge badge-primary">📍 {{ c.direccion[:30] }}...</span>{% endif %}
+            </div>
+            <div class="card-actions">
+                <a href="{{ url_for('editar_cliente', id=c.id) }}" class="btn btn-outline btn-sm">✏️ Editar</a>
+                <a href="{{ url_for('eliminar_cliente', id=c.id) }}" class="btn btn-outline btn-sm" onclick="return confirm('¿Eliminar este cliente?')">🗑️ Eliminar</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">👥</div>
+        <p>No hay clientes registrados</p>
+    </div>
+    {% endif %}
+
+    <a href="{{ url_for('crear_cliente') }}" class="btn btn-primary btn-fab">+</a>
+</div>
+{% endblock %}

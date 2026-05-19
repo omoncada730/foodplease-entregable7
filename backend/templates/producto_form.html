@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}{{ accion }} Producto{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">{{ accion }} Producto</h1>
+        </div>
+        <a href="{{ url_for('listar_productos') }}" class="btn btn-outline btn-sm">← Volver</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                <div class="form-group">
+                    <label class="form-label">Nombre *</label>
+                    <input type="text" name="nombre" class="form-control" required
+                           value="{{ producto.nombre if producto else '' }}" placeholder="Ej: Classic Burger">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descripcion</label>
+                    <textarea name="descripcion" class="form-control" rows="3"
+                              placeholder="Ingredientes o descripcion breve">{{ producto.descripcion if producto else '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Precio (CLP) *</label>
+                    <input type="number" name="precio" class="form-control" required step="100"
+                           value="{{ producto.precio|int if producto else '' }}" placeholder="5900">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Categoria</label>
+                    <select name="categoria" class="form-control">
+                        <option value="Hamburguesas" {% if producto and producto.categoria=='Hamburguesas' %}selected{% endif %}>🍔 Hamburguesas</option>
+                        <option value="Combos" {% if producto and producto.categoria=='Combos' %}selected{% endif %}>🎁 Combos</option>
+                        <option value="Acompanamientos" {% if producto and producto.categoria=='Acompanamientos' %}selected{% endif %}>🍟 Acompanamientos</option>
+                        <option value="Bebidas" {% if producto and producto.categoria=='Bebidas' %}selected{% endif %}>🥤 Bebidas</option>
+                        <option value="Postres" {% if producto and producto.categoria=='Postres' %}selected{% endif %}>🍰 Postres</option>
+                        <option value="General" {% if producto and producto.categoria=='General' %}selected{% endif %}>📦 General</option>
+                    </select>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" name="disponible" id="disponible"
+                           {% if not producto or producto.disponible %}checked{% endif %}>
+                    <label for="disponible">Producto disponible</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    {% if accion == 'Crear' %}✅ Crear Producto{% else %}💾 Guardar Cambios{% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

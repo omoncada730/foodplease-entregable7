@@ -1,0 +1,22 @@
+{
+  "name": "foodplease-mobile",
+  "version": "1.0.0",
+  "description": "App hibrida iOS/Android de FoodPlease (Capacitor) que envuelve la PWA y consume la API REST Flask",
+  "private": true,
+  "scripts": {
+    "build": "echo \"Bundle www/ ya esta listo\"",
+    "android": "npx cap sync android && npx cap open android",
+    "ios": "npx cap sync ios && npx cap open ios",
+    "sync": "npx cap sync"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.0",
+    "@capacitor/core": "^6.1.0",
+    "@capacitor/ios": "^6.1.0",
+    "@capacitor/splash-screen": "^6.0.2",
+    "@capacitor/status-bar": "^6.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.0"
+  }
+}

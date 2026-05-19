@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}{{ accion }} Repartidor{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">{{ accion }} Repartidor</h1>
+        </div>
+        <a href="{{ url_for('listar_repartidores') }}" class="btn btn-outline btn-sm">← Volver</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                <div class="form-group">
+                    <label class="form-label">Nombre completo *</label>
+                    <input type="text" name="nombre" class="form-control" required
+                           value="{{ repartidor.nombre if repartidor else '' }}" placeholder="Ej: Carlos Martinez">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Telefono</label>
+                    <input type="tel" name="telefono" class="form-control"
+                           value="{{ repartidor.telefono if repartidor else '' }}" placeholder="+56955667788">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Vehiculo</label>
+                    <select name="vehiculo" class="form-control">
+                        <option value="Moto" {% if repartidor and repartidor.vehiculo=='Moto' %}selected{% endif %}>🏍️ Moto</option>
+                        <option value="Bicicleta" {% if repartidor and repartidor.vehiculo=='Bicicleta' %}selected{% endif %}>🚲 Bicicleta</option>
+                        <option value="Auto" {% if repartidor and repartidor.vehiculo=='Auto' %}selected{% endif %}>🚗 Auto</option>
+                        <option value="A pie" {% if repartidor and repartidor.vehiculo=='A pie' %}selected{% endif %}>🚶 A pie</option>
+                    </select>
+                </div>
+                {% if repartidor %}
+                <div class="checkbox-group">
+                    <input type="checkbox" name="disponible" id="disponible"
+                           {% if repartidor.disponible %}checked{% endif %}>
+                    <label for="disponible">Disponible para entregas</label>
+                </div>
+                {% endif %}
+                <button type="submit" class="btn btn-primary btn-block">
+                    {% if accion == 'Crear' %}✅ Crear Repartidor{% else %}💾 Guardar Cambios{% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}{{ accion }} Pedido{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">{{ accion }} Pedido</h1>
+        </div>
+        <a href="{{ url_for('listar_pedidos') }}" class="btn btn-outline btn-sm">← Volver</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                <div class="form-group">
+                    <label class="form-label">Cliente *</label>
+                    <select name="cliente_id" class="form-control" required>
+                        <option value="">Seleccionar cliente...</option>
+                        {% for c in clientes %}
+                        <option value="{{ c.id }}">{{ c.nombre }} - {{ c.email }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Direccion de entrega *</label>
+                    <input type="text" name="direccion_entrega" class="form-control" required
+                           placeholder="Av. Providencia 1234, Santiago">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Productos *</label>
+                    {% for p in productos %}
+                    <div class="checkbox-group" style="border-bottom: 1px solid #F5F5F5; padding: 10px 0;">
+                        <input type="checkbox" name="productos" value="{{ p.id }}" id="prod{{ p.id }}">
+                        <label for="prod{{ p.id }}" style="flex:1;">
+                            <strong>{{ p.nombre }}</strong>
+                            <span style="color:#888; font-size:12px;"> - {{ p.categoria }}</span>
+                            <br><span style="color:#FF6B35; font-weight:700;">${{ '{:,.0f}'.format(p.precio) }}</span>
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Metodo de pago</label>
+                    <select name="metodo_pago" class="form-control">
+                        <option value="efectivo">💵 Efectivo</option>
+                        <option value="tarjeta">💳 Tarjeta</option>
+                        <option value="transferencia">🏦 Transferencia</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">✅ Confirmar Pedido</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

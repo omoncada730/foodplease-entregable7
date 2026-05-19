@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#FF6B35">
+    <title>FoodPlease</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="topbar">
+        <h1>Food<span>Please</span> 🍔</h1>
+        <p id="status">Conectando con el backend...</p>
+    </header>
+
+    <main>
+        <section id="welcome" class="card">
+            <h2>App movil hibrida</h2>
+            <p>
+                Esta aplicacion fue construida con <strong>Capacitor</strong>, un
+                framework de desarrollo hibrido para iOS y Android, y consume la
+                <strong>API REST</strong> publicada por el backend Flask de
+                FoodPlease.
+            </p>
+            <button id="btn-open-web" class="primary">Abrir aplicacion web completa</button>
+        </section>
+
+        <section class="card">
+            <h2>Productos disponibles</h2>
+            <p class="muted">Consumidos desde <code>GET /api/productos</code></p>
+            <ul id="productos" class="list"></ul>
+        </section>
+
+        <section class="card">
+            <h2>Ultimos pedidos</h2>
+            <p class="muted">Consumidos desde <code>GET /api/pedidos</code></p>
+            <ul id="pedidos" class="list"></ul>
+        </section>
+
+        <section class="card">
+            <h2>Configuracion</h2>
+            <label for="backend-url">URL del backend:</label>
+            <input id="backend-url" type="url" placeholder="https://foodplease-app.herokuapp.com">
+            <button id="btn-save" class="secondary">Guardar y recargar</button>
+            <p class="hint">
+                Por defecto: <code id="default-url"></code>.
+                En el emulador Android, <code>http://10.0.2.2:5000</code> apunta
+                al Flask local de tu maquina.
+            </p>
+        </section>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="#" data-action="reload">🔄 Recargar</a>
+        <a href="#" data-action="open">🌐 Web</a>
+        <a href="#" data-action="api">📡 API</a>
+    </nav>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

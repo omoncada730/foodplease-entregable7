@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block title %}Pedido #{{ pedido.id }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Pedido #{{ pedido.id }}</h1>
+            <p class="page-subtitle">{{ pedido.fecha_pedido }}</p>
+        </div>
+        <a href="{{ url_for('listar_pedidos') }}" class="btn btn-outline btn-sm">← Volver</a>
+    </div>
+
+    <!-- Estado del pedido -->
+    <div class="card">
+        <div class="card-body">
+            <h3 style="font-size:14px; font-weight:700; color:#888; margin-bottom:12px;">ESTADO DEL PEDIDO</h3>
+            <div class="status-track">
+                <div class="status-step {% if pedido.estado in ['confirmado','preparando','en_camino','entregado'] %}done{% endif %}">
+                    <div class="status-dot">✓</div>
+                    <span>Confirmado</span>
+                </div>
+                <div class="status-step {% if pedido.estado in ['preparando','en_camino','entregado'] %}done{% elif pedido.estado == 'confirmado' %}{% endif %}">
+                    <div class="status-dot">{% if pedido.estado in ['preparando','en_camino','entregado'] %}✓{% else %}2{% endif %}</div>
+                    <span>Preparando</span>
+                </div>
+                <div class="status-step {% if pedido.estado in ['en_camino','entregado'] %}done{% elif pedido.estado == 'preparando' %}active{% endif %}">
+                    <div class="status-dot">{% if pedido.estado in ['en_camino','entregado'] %}✓{% else %}🛵{% endif %}</div>
+                    <span>En camino</span>
+                </div>
+                <div class="status-step {% if pedido.estado == 'entregado' %}done{% elif pedido.estado == 'en_camino' %}active{% endif %}">
+                    <div class="status-dot">{% if pedido.estado == 'entregado' %}✓{% else %}4{% endif %}</div>
+                    <span>Entregado</span>
+                </div>
+            </div>
+
+            <!-- Botones de estado -->
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
+                {% if pedido.estado == 'confirmado' %}
+                <a href="{{ url_for('cambiar_estado_pedido', id=pedido.id, estado='preparando') }}" class="btn btn-primary btn-sm">👨‍🍳 Preparar</a>
+                {% endif %}
+                {% if pedido.estado == 'preparando' %}
+                <a href="{{ url_for('cambiar_estado_pedido', id=pedido.id, estado='en_camino') }}" class="btn btn-primary btn-sm">🛵 Enviar</a>
+                {% endif %}
+                {% if pedido.estado == 'en_camino' %}
+                <a href="{{ url_for('cambiar_estado_pedido', id=pedido.id, estado='entregado') }}" class="btn btn-success btn-sm">✅ Entregado</a>
+                {% endif %}
+                {% if pedido.estado != 'entregado' and pedido.estado != 'cancelado' %}
+                <a href="{{ url_for('cambiar_estado_pedido', id=pedido.id, estado='cancelado') }}" class="btn btn-danger btn-sm" onclick="return confirm('¿Cancelar este pedido?')">❌ Cancelar</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Info cliente -->
+    <div class="card">
+        <div class="card-body">
+            <h3 style="font-size:14px; font-weight:700; color:#888; margin-bottom:12px;">👤 CLIENTE</h3>
+            <div class="detail-row">
+                <span class="detail-label">Nombre</span>
+                <span class="detail-value">{{ pedido.cliente_nombre }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Telefono</span>
+                <span class="detail-value">{{ pedido.cliente_telefono or 'N/A' }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Direccion</span>
+                <span class="detail-value">{{ pedido.direccion_entrega }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Repartidor -->
+    <div class="card">
+        <div class="card-body">
+            <h3 style="font-size:14px; font-weight:700; color:#888; margin-bottom:12px;">🛵 REPARTIDOR</h3>
+            {% if pedido.repartidor_nombre %}
+            <div class="detail-row">
+                <span class="detail-label">Nombre</span>
+                <span class="detail-value">{{ pedido.repartidor_nombre }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Telefono</span>
+                <span class="detail-value">{{ pedido.repartidor_telefono or 'N/A' }}</span>
+            </div>
+            {% else %}
+            <form method="POST" action="{{ url_for('asignar_repartidor', id=pedido.id) }}" style="display:flex; gap:8px;">
+                <select name="repartidor_id" class="form-control" required style="flex:1;">
+                    <option value="">Seleccionar...</option>
+                    {% set db = pedido %}
+                    <!-- Repartidores cargados via endpoint -->
+                </select>
+                <button type="submit" class="btn btn-primary btn-sm">Asignar</button>
+            </form>
+            <p style="color:#888; font-size:12px; margin-top:8px;">Sin repartidor asignado. Asigne uno desde la lista de pedidos.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Detalle productos -->
+    <div class="card">
+        <div class="card-body">
+            <h3 style="font-size:14px; font-weight:700; color:#888; margin-bottom:12px;">🛒 DETALLE DEL PEDIDO</h3>
+            {% for d in detalles %}
+            <div class="detail-row">
+                <span class="detail-value">{{ d.producto_nombre }} x{{ d.cantidad }}</span>
+                <span class="price">${{ '{:,.0f}'.format(d.precio_unitario * d.cantidad) }}</span>
+            </div>
+            {% endfor %}
+            <div class="detail-row detail-total">
+                <span>TOTAL</span>
+                <span>${{ '{:,.0f}'.format(pedido.total) }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Metodo de pago</span>
+                <span class="detail-value">{{ pedido.metodo_pago }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones -->
+    <div style="margin-top:16px;">
+        <a href="{{ url_for('eliminar_pedido', id=pedido.id) }}" class="btn btn-danger btn-block" onclick="return confirm('¿Eliminar este pedido permanentemente?')">🗑️ Eliminar Pedido</a>
+    </div>
+</div>
+{% endblock %}

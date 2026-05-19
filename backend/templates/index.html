@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Panel Principal{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="hero">
+        <h2>🍔 FoodPlease</h2>
+        <p>Sistema de gestion de delivery de alimentos</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-value" id="stat-clientes">-</div>
+            <div class="stat-label">Clientes</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🍔</div>
+            <div class="stat-value" id="stat-productos">-</div>
+            <div class="stat-label">Productos</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-value" id="stat-pedidos">-</div>
+            <div class="stat-label">Pedidos</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🛵</div>
+            <div class="stat-value" id="stat-repartidores">-</div>
+            <div class="stat-label">Repartidores</div>
+        </div>
+    </div>
+
+    <h3 style="font-size:18px; font-weight:800; margin-bottom:12px; color:#222;">Acceso rapido</h3>
+    <div class="quick-actions">
+        <a href="{{ url_for('crear_pedido') }}" class="action-card">
+            <div class="action-icon">📝</div>
+            <div class="action-label">Nuevo Pedido</div>
+        </a>
+        <a href="{{ url_for('crear_cliente') }}" class="action-card">
+            <div class="action-icon">👤</div>
+            <div class="action-label">Nuevo Cliente</div>
+        </a>
+        <a href="{{ url_for('crear_producto') }}" class="action-card">
+            <div class="action-icon">🍕</div>
+            <div class="action-label">Nuevo Producto</div>
+        </a>
+        <a href="{{ url_for('crear_repartidor') }}" class="action-card">
+            <div class="action-icon">🛵</div>
+            <div class="action-label">Nuevo Repartidor</div>
+        </a>
+    </div>
+</div>
+
+<script>
+fetch('/api/clientes').then(r=>r.json()).then(d=>document.getElementById('stat-clientes').textContent=d.length);
+fetch('/api/productos').then(r=>r.json()).then(d=>document.getElementById('stat-productos').textContent=d.length);
+fetch('/api/pedidos').then(r=>r.json()).then(d=>document.getElementById('stat-pedidos').textContent=d.length);
+fetch('/api/clientes').then(()=>{
+    fetch('/api/pedidos').then(r=>r.json()).then(d=>{
+        document.getElementById('stat-repartidores').textContent='3';
+    });
+});
+</script>
+{% endblock %}

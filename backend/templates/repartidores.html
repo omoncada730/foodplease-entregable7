@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Repartidores{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Repartidores</h1>
+            <p class="page-subtitle">{{ repartidores|length }} registrados</p>
+        </div>
+    </div>
+
+    {% if repartidores %}
+    {% for r in repartidores %}
+    <div class="card">
+        <div class="card-body">
+            <div class="card-row">
+                <div>
+                    <div class="card-title">🛵 {{ r.nombre }}</div>
+                    <div class="card-subtitle">{{ r.vehiculo }} · ⭐ {{ r.calificacion }}</div>
+                </div>
+                {% if r.disponible %}
+                <span class="badge badge-success">Disponible</span>
+                {% else %}
+                <span class="badge badge-danger">Ocupado</span>
+                {% endif %}
+            </div>
+            <div class="card-meta">
+                {% if r.telefono %}<span class="badge badge-info">📞 {{ r.telefono }}</span>{% endif %}
+            </div>
+            <div class="card-actions">
+                <a href="{{ url_for('editar_repartidor', id=r.id) }}" class="btn btn-outline btn-sm">✏️ Editar</a>
+                <a href="{{ url_for('eliminar_repartidor', id=r.id) }}" class="btn btn-outline btn-sm" onclick="return confirm('¿Eliminar este repartidor?')">🗑️ Eliminar</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">🛵</div>
+        <p>No hay repartidores registrados</p>
+    </div>
+    {% endif %}
+
+    <a href="{{ url_for('crear_repartidor') }}" class="btn btn-primary btn-fab">+</a>
+</div>
+{% endblock %}
